@@ -2,10 +2,14 @@ package com.backend.serviceImp;
 
 import java.util.List;
 
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import com.backend.dto.CategoryDto;
+import com.backend.dto.CategoryResponse;
 import com.backend.entity.Category;
 import com.backend.repository.CategoryRepository;
 import com.backend.service.CategoryService;
@@ -15,11 +19,27 @@ import com.backend.service.CategoryService;
 @Service
 public class CetegoryServiceImp  implements CategoryService{
 	
-	@Autowired
-	CategoryRepository cr;
+	private static final Object CategoryResponse = null;
 
+
+	@Autowired
+    private CategoryRepository cr;
+	
+	
+	@Autowired
+	private ModelMapper mapper;
+	
+
+	
+
+	
+	
+
+	
 	@Override
-	public Boolean saveCategory(Category category) {
+	public Boolean saveCategory(CategoryDto categoryDto) {
+		
+		Category category = mapper.map(categoryDto, Category.class);
 	
 		Category save = cr.save(category);
 		
@@ -29,6 +49,8 @@ public class CetegoryServiceImp  implements CategoryService{
 		}
 		return true;
 		
+		
+		
 	}
 
 	@Override
@@ -37,6 +59,16 @@ public class CetegoryServiceImp  implements CategoryService{
 		List<Category> all = cr.findAll();
 		
 		return all;
+	}
+
+	@Override
+	public List<CategoryResponse> getResponse() {
+		
+		List<Category> categorys = cr.findByIsActiveTrue();
+		
+		List<com.backend.dto.CategoryResponse> list = categorys.stream().map(cat->mapper.map(cat,CategoryResponse.class)).toList();
+		
+		return list;
 	}
 
 	
