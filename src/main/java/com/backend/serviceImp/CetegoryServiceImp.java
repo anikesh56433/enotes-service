@@ -1,7 +1,7 @@
 package com.backend.serviceImp;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +69,33 @@ public class CetegoryServiceImp  implements CategoryService{
 		List<com.backend.dto.CategoryResponse> list = categorys.stream().map(cat->mapper.map(cat,CategoryResponse.class)).toList();
 		
 		return list;
+	}
+
+	@Override
+	public Optional<Category> getById(Integer id) {
+		
+		Optional<Category> byId = cr.findById(id);
+		
+		
+		return byId;
+	}
+
+	@Override
+	public Boolean deleteByIdData(Integer id) {
+		
+		   Optional<Category> byId = cr.findById(id);
+		   cr.deleteById(id);
+		   if(byId.isPresent())
+		   {
+			   return true;
+		   }
+		   else
+		   {
+			   return false;
+		   }
+		 
+		
+		
 	}
 
 	
